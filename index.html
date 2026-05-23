@@ -1,83 +1,1331 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What a Parallax !</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLE//SYSTEM — Complete Digital Commerce Strategy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#050505; --white:#F5F0E8; --cream:#E8E0D0;
+  --gold:#C8A96E; --ember:#E85D3A; --gray:#8A8A8A;
+  --dark:#0F0F0F; --card:#111111; --border:rgba(200,169,110,0.18);
+  --green:#22C55E;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory;}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+.cursor{width:10px;height:10px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .3s,height .3s;}
+.cursor-ring{width:34px;height:34px;border:1px solid rgba(200,169,110,.4);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .15s ease;}
+.progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:1000;transition:width .1s;}
+.slide-nav{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:100;}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.15);cursor:pointer;transition:all .3s;}
+.nav-dot.active{background:var(--gold);height:16px;border-radius:3px;}
 
+/* ─── SECTION BASE ─────────────────────────────── */
+section{min-height:100vh;scroll-snap-align:start;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+section::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+.content{position:relative;z-index:2;padding:90px 9vw;}
+.pad{padding:90px 9vw;}
+
+/* ─── TYPE ─────────────────────────────────────── */
+.display{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em;line-height:.92;}
+.label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:12px;}
+.label::before{content:'';width:22px;height:1px;background:var(--gold);flex-shrink:0;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,80px);line-height:.93;margin:18px 0 0;}
+.sec-sub{font-size:14px;color:var(--gray);margin-top:14px;max-width:560px;line-height:1.8;}
+.gold-line{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:24px 0;}
+
+/* ─── SCROLL HINT ──────────────────────────────── */
+.scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;animation:pulse 2.5s ease-in-out infinite;}
+.scroll-hint span{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.22em;color:rgba(255,255,255,.2);}
+.scroll-arrow{width:1px;height:36px;background:linear-gradient(to bottom,var(--gold),transparent);}
+@keyframes pulse{0%,100%{opacity:.35;}50%{opacity:1;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* ─── PART DIVIDER ─────────────────────────────── */
+.part-div{min-height:100vh;scroll-snap-align:start;background:var(--gold);display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.part-div-bg{position:absolute;inset:0;font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,18vw,280px);color:rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;pointer-events:none;letter-spacing:.02em;}
+.part-div-inner{position:relative;z-index:1;text-align:center;padding:40px;}
+.part-div-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.3em;color:rgba(0,0,0,.4);text-transform:uppercase;margin-bottom:18px;}
+.part-div-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,9vw,116px);color:var(--black);line-height:.9;letter-spacing:.02em;}
+.part-div-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:rgba(0,0,0,.45);margin-top:18px;}
+
+/* ─── UTILITY CARDS ────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.gap16{gap:16px!important;}
+.gap20{gap:20px!important;}
+.gap24{gap:24px!important;}
+.dark-card{background:var(--card);padding:32px 26px;border:1px solid rgba(255,255,255,.04);transition:border-color .3s;}
+.dark-card:hover{border-color:rgba(200,169,110,.3);}
+.gold-card{background:var(--card);border:1px solid var(--border);}
+.accent-top-1{border-top:3px solid var(--gold)!important;}
+.accent-top-2{border-top:3px solid var(--ember)!important;}
+.accent-top-3{border-top:3px solid var(--green)!important;}
+.accent-left{border-left:3px solid var(--gold)!important;}
+
+/* card headings */
+.ch{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;margin-bottom:14px;}
+.ch-sm{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.06em;margin-bottom:10px;}
+.ct{font-size:12px;color:var(--gray);line-height:1.7;}
+.tag{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:10px;}
+.tag-gold{background:rgba(200,169,110,.1);color:var(--gold);}
+.tag-ember{background:rgba(232,93,58,.1);color:var(--ember);}
+.tag-green{background:rgba(34,197,94,.1);color:var(--green);}
+
+/* check list */
+.chk{display:flex;flex-direction:column;gap:9px;}
+.chk-item{font-size:12px;color:var(--gray);display:flex;gap:10px;align-items:flex-start;}
+.chk-item::before{content:'✓';color:var(--gold);flex-shrink:0;font-size:10px;}
+.chk-item.em{color:var(--white);}
+.arr-list{display:flex;flex-direction:column;gap:8px;}
+.arr-item{font-size:12px;color:var(--gray);display:flex;gap:10px;align-items:flex-start;}
+.arr-item::before{content:'→';color:var(--gold);flex-shrink:0;opacity:.7;}
+.dot-list{display:flex;flex-direction:column;gap:8px;}
+.dot-item{font-size:12px;color:var(--gray);display:flex;gap:10px;align-items:flex-start;}
+.dot-item::before{content:'◆';color:var(--gold);font-size:7px;margin-top:4px;flex-shrink:0;}
+
+/* mono stat */
+.big-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,72px);color:var(--gold);line-height:1;}
+.stat-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.08em;margin-top:6px;}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;padding-top:56px;border-top:1px solid var(--border);}
+
+/* ─── COVER ─────────────────────────────────────── */
+#cover{padding:0;}
+.cover-grid{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+.cover-left{padding:80px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--border);}
+.cover-right{background:var(--dark);position:relative;overflow:hidden;}
+.cover-bg-word{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:clamp(90px,17vw,240px);color:rgba(200,169,110,.04);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;}
+.cover-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(64px,9.5vw,130px);line-height:.88;margin:18px 0 20px;animation:fadeUp 1s .2s both;}
+.cover-title span{color:var(--gold);}
+.cover-subtitle{font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,20px);font-style:italic;color:var(--gray);max-width:380px;line-height:1.65;animation:fadeUp 1s .4s both;}
+.cover-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.3em;color:var(--gold);animation:fadeUp 1s both;}
+.cover-meta{animation:fadeUp 1s .6s both;}
+.cover-meta-item{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.25);line-height:2;}
+.cover-meta-item span{color:var(--gold);}
+.cover-shoe{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.shoe-svg{width:78%;animation:float 6s ease-in-out infinite;opacity:.85;}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-18px) rotate(-1deg);}}
+
+/* ─── MANIFESTO ─────────────────────────────────── */
+.manifesto-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(34px,5.5vw,82px);line-height:1.04;max-width:880px;}
+.manifesto-text .dim{color:rgba(255,255,255,.14);}
+.manifesto-text .hi{color:var(--gold);}
+
+/* ─── WHY BRANDS FAIL ───────────────────────────── */
+.fail-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:56px;}
+.fail-card{background:var(--card);padding:24px 20px;position:relative;overflow:hidden;}
+.fail-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--ember);opacity:.4;}
+.fail-icon{font-size:24px;margin-bottom:14px;}
+.fail-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.06em;margin-bottom:8px;color:rgba(255,255,255,.6);}
+.fail-desc{font-size:11px;color:rgba(255,255,255,.28);line-height:1.6;}
+.fail-solution{margin-top:48px;background:linear-gradient(135deg,rgba(200,169,110,.08),transparent);border:1px solid var(--border);padding:32px;}
+.fail-sol-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:20px;}
+.fail-sol-item{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--gray);}
+.fail-sol-item::before{content:'✓';color:var(--gold);flex-shrink:0;}
+
+/* ─── CUSTOMER JOURNEY ──────────────────────────── */
+.journey-flow{margin-top:56px;display:flex;flex-direction:column;gap:0;}
+.journey-row{display:grid;grid-template-columns:180px 1fr auto;gap:0;align-items:stretch;border-bottom:1px solid rgba(255,255,255,.04);}
+.journey-step-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);opacity:.18;line-height:1;padding:20px 24px;border-right:1px solid rgba(255,255,255,.04);}
+.journey-step-body{padding:20px 28px;}
+.journey-step-title{font-size:14px;font-weight:500;margin-bottom:6px;letter-spacing:.04em;}
+.journey-step-desc{font-size:12px;color:var(--gray);line-height:1.65;}
+.journey-tags{padding:20px 24px;display:flex;flex-direction:column;gap:6px;justify-content:center;min-width:200px;}
+.journey-tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;padding:4px 10px;border:1px solid;text-transform:uppercase;text-align:center;}
+.journey-tag.gold{border-color:rgba(200,169,110,.35);color:var(--gold);}
+.journey-tag.ember{border-color:rgba(232,93,58,.35);color:var(--ember);}
+.journey-tag.green{border-color:rgba(34,197,94,.35);color:var(--green);}
+
+/* ─── COMPETITOR BENCHMARKING ───────────────────── */
+.bench-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.bench-card{background:var(--card);padding:28px 24px;}
+.bench-brand{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.08em;margin-bottom:4px;}
+.bench-type{font-size:10px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;}
+.bench-metrics{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.bench-metric{display:flex;justify-content:space-between;align-items:center;font-size:11px;}
+.bench-metric-label{color:var(--gray);}
+.bench-bar-wrap{flex:1;margin:0 12px;height:2px;background:rgba(255,255,255,.07);}
+.bench-bar{height:100%;background:var(--gold);}
+.bench-opp{padding:12px 14px;background:rgba(200,169,110,.05);border-left:2px solid var(--gold);font-size:11px;color:var(--gray);line-height:1.6;}
+.bench-opp strong{color:var(--gold);display:block;margin-bottom:4px;font-size:11px;}
+
+/* ─── SCALE/COST GRAPH ──────────────────────────── */
+.scale-graph{margin-top:56px;display:flex;flex-direction:column;gap:40px;}
+.scale-row{display:grid;grid-template-columns:160px 1fr 1fr 1fr;gap:0;align-items:center;}
+.scale-row-header{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--gray);text-transform:uppercase;padding:0 16px;}
+.scale-label{font-size:12px;color:var(--gray);padding:0 16px;line-height:1.5;}
+.scale-bar-cell{padding:8px 16px;}
+.scale-bar-outer{height:28px;background:rgba(255,255,255,.05);border-radius:2px;position:relative;overflow:hidden;}
+.scale-bar-inner{height:100%;border-radius:2px;display:flex;align-items:center;padding:0 12px;font-family:'Space Mono',monospace;font-size:10px;white-space:nowrap;transition:width .8s ease;}
+.bar-shopify{background:rgba(200,169,110,.35);color:var(--gold);}
+.bar-headless{background:rgba(200,169,110,.65);color:var(--gold);}
+.bar-custom{background:var(--gold);color:var(--black);}
+.scale-legend{display:flex;gap:32px;margin-top:8px;}
+.scale-legend-item{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--gray);}
+.scale-legend-dot{width:10px;height:10px;border-radius:2px;}
+
+/* ─── TECH MATRIX ───────────────────────────────── */
+.matrix-table{width:100%;border-collapse:collapse;margin-top:56px;}
+.matrix-table th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);padding:14px 16px;text-align:left;border-bottom:1px solid var(--border);background:rgba(200,169,110,.04);}
+.matrix-table td{padding:13px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;}
+.matrix-table tr:hover td{background:rgba(255,255,255,.02);}
+.matrix-table td:first-child{color:var(--white);font-weight:500;font-size:13px;border-right:1px solid var(--border);}
+.matrix-table .rec-col{background:rgba(200,169,110,.04);}
+.score-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;}
+.score-dot.full{background:var(--gold);}
+.score-dot.half{background:rgba(200,169,110,.4);}
+.score-dot.none{background:rgba(255,255,255,.1);}
+
+/* ─── WHY ARCHITECTURE ──────────────────────────── */
+.why-arch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.why-arch-card{background:var(--card);padding:28px 22px;position:relative;}
+.why-arch-card.highlight{background:rgba(200,169,110,.06);border:1px solid var(--border);}
+.why-num{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--gold);opacity:.18;line-height:1;margin-bottom:14px;}
+.why-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;margin-bottom:12px;}
+.why-body{font-size:12px;color:var(--gray);line-height:1.7;}
+.why-bottom{margin-top:40px;padding:28px 32px;background:rgba(200,169,110,.04);border:1px solid var(--border);}
+
+/* ─── UX GRID ───────────────────────────────────── */
+.ux-6{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.ux-card{background:var(--card);padding:36px 28px;transition:background .3s;}
+.ux-card:hover{background:#1a1a1a;}
+.ux-icon{width:48px;height:48px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:18px;}
+.ux-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;margin-bottom:10px;}
+.ux-desc{font-size:12px;color:var(--gray);line-height:1.8;}
+
+/* ─── FEATURES GRID ─────────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);}
+.feat-box{background:var(--dark);padding:26px 22px;transition:background .3s;}
+.feat-box:hover{background:#161616;}
+.feat-icon{font-size:20px;margin-bottom:14px;}
+.feat-name{font-size:13px;font-weight:500;margin-bottom:7px;letter-spacing:.02em;}
+.feat-desc{font-size:11px;color:var(--gray);line-height:1.7;}
+
+/* ─── ADV FEATURES ──────────────────────────────── */
+.adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.adv-feat{background:var(--card);border:1px solid rgba(255,255,255,.04);padding:22px 18px;transition:border-color .3s;}
+.adv-feat:hover{border-color:rgba(200,169,110,.3);}
+
+/* ─── TECH COMPARE 3 ────────────────────────────── */
+.tech3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.tech-card{background:var(--card);padding:34px 26px;position:relative;}
+.tech-card.rec{background:#161008;border:1px solid var(--gold);}
+.tech-rec-badge{position:absolute;top:-1px;right:22px;background:var(--gold);color:var(--black);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;padding:4px 10px;text-transform:uppercase;}
+.tech-name{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.06em;margin-bottom:4px;}
+.tech-sub{font-size:11px;color:var(--gray);margin-bottom:22px;}
+.tech-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.tech-bar-label{font-size:10px;color:var(--gray);width:90px;flex-shrink:0;}
+.tech-bar-track{flex:1;height:2px;background:rgba(255,255,255,.07);}
+.tech-bar-fill{height:100%;background:var(--gold);}
+.tech-bar-val{font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);width:22px;text-align:right;}
+
+/* ─── PLATFORM COMPARE ──────────────────────────── */
+.plat4{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.plat-card{background:var(--card);padding:30px 22px;position:relative;}
+.plat-card.star{background:#0d0c08;border:1px solid var(--gold);}
+.plat-star-badge{position:absolute;top:-1px;left:22px;background:var(--gold);color:var(--black);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;padding:4px 10px;text-transform:uppercase;}
+.plat-icon{font-size:30px;margin-bottom:14px;}
+.plat-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.06em;margin-bottom:3px;}
+.plat-tagline{font-size:11px;color:var(--gray);margin-bottom:18px;}
+.plat-star-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.plat-star-label{font-size:10px;color:var(--gray);}
+.stars span{font-size:11px;}
+.star-on{color:var(--gold);}
+.star-off{color:rgba(255,255,255,.1);}
+.pro-con{display:flex;flex-direction:column;gap:7px;margin-top:14px;}
+.pro-item,.con-item{font-size:11px;line-height:1.5;display:flex;gap:8px;align-items:flex-start;}
+.pro-item::before{content:'✓';color:var(--green);flex-shrink:0;}
+.con-item::before{content:'✗';color:var(--ember);flex-shrink:0;}
+.plat-cost{margin-top:14px;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid var(--border);font-size:11px;color:var(--gray);}
+.plat-cost-val{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--gold);}
+
+/* ─── DESIGN SYSTEM ─────────────────────────────── */
+.ds-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-top:56px;}
+.ds-block-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.type-demo{background:var(--card);padding:26px;}
+.type-display{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:.02em;line-height:1;margin-bottom:10px;}
+.type-serif{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--gray);margin-bottom:8px;}
+.type-body{font-size:12px;color:rgba(255,255,255,.35);line-height:1.6;}
+.swatch-col{display:flex;flex-direction:column;gap:10px;}
+.swatch{height:42px;display:flex;align-items:center;padding:0 16px;}
+.swatch span{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;}
+.sw-black{background:var(--black);border:1px solid var(--border);}
+.sw-cream{background:var(--cream);color:var(--black);}
+.sw-gold{background:var(--gold);color:var(--black);}
+.sw-ember{background:var(--ember);}
+.anim-col{display:flex;flex-direction:column;gap:10px;}
+.anim-item{background:var(--card);padding:13px 15px;border-left:2px solid var(--gold);}
+.anim-name{font-size:12px;font-weight:500;margin-bottom:3px;}
+.anim-desc{font-size:10px;color:var(--gray);}
+
+/* ─── PERFORMANCE ───────────────────────────────── */
+.perf-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;margin-top:56px;align-items:center;}
+.score-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.score-circle{width:78px;height:78px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;}
+.score-circle.g{background:conic-gradient(var(--green) calc(var(--p)*1%),rgba(255,255,255,.05) 0);box-shadow:0 0 18px rgba(34,197,94,.15);}
+.score-circle.a{background:conic-gradient(var(--gold) calc(var(--p)*1%),rgba(255,255,255,.05) 0);box-shadow:0 0 18px rgba(200,169,110,.15);}
+.score-circle::after{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--dark);}
+.score-val{position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:22px;}
+.score-lbl{font-size:9px;color:var(--gray);letter-spacing:.08em;text-transform:uppercase;text-align:center;}
+.cwv-box{background:var(--card);border:1px solid var(--border);padding:22px;margin-top:28px;}
+.cwv-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cwv-row:last-child{border:none;}
+.cwv-key{font-size:12px;color:var(--gray);}
+.cwv-val{font-family:'Space Mono',monospace;font-size:11px;color:var(--green);}
+.perf-feat-list{display:flex;flex-direction:column;gap:18px;}
+.perf-feat{display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.04);}
+.perf-badge{font-family:'Space Mono',monospace;font-size:8px;padding:3px 7px;border:1px solid;letter-spacing:.1em;white-space:nowrap;}
+.pb-green{border-color:rgba(34,197,94,.4);color:var(--green);}
+.pb-gold{border-color:rgba(200,169,110,.4);color:var(--gold);}
+
+/* ─── SECURITY ──────────────────────────────────── */
+.sec3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;}
+.sec-card{background:var(--card);padding:34px 26px;}
+.sec-icon{font-size:26px;margin-bottom:18px;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.08em;margin-bottom:16px;}
+
+/* ─── ROADMAP ───────────────────────────────────── */
+.roadmap4{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative;}
+.roadmap4::before{content:'';position:absolute;top:12px;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--gold),transparent);}
+.phase-card{padding:0 24px 0 0;position:relative;}
+.phase-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--gold);background:var(--dark);margin-bottom:28px;position:relative;z-index:1;}
+.phase-dot.on{background:var(--gold);}
+.phase-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.phase-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.08em;margin-bottom:18px;line-height:1.1;}
+.phase-tl{margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);}
+
+/* ─── ECOSYSTEM MAP ─────────────────────────────── */
+.eco-map{display:grid;grid-template-columns:1fr 2fr 1fr;gap:0;margin-top:56px;min-height:420px;}
+.eco-col{display:flex;flex-direction:column;gap:2px;}
+.eco-center{display:flex;align-items:center;justify-content:center;border-left:1px solid var(--border);border-right:1px solid var(--border);}
+.eco-circle{width:170px;height:170px;border-radius:50%;border:1px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(200,169,110,.04);box-shadow:0 0 50px rgba(200,169,110,.07);}
+.eco-circle-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;line-height:1.2;}
+.eco-circle-sub{font-size:10px;color:var(--gray);margin-top:4px;letter-spacing:.1em;}
+.eco-node{background:var(--card);padding:20px;border:1px solid rgba(255,255,255,.04);flex:1;transition:border-color .3s;}
+.eco-node:hover{border-color:rgba(200,169,110,.3);}
+.eco-node-icon{font-size:18px;margin-bottom:8px;}
+.eco-node-title{font-size:13px;font-weight:500;margin-bottom:5px;}
+.eco-node-desc{font-size:11px;color:var(--gray);line-height:1.6;}
+
+/* ─── FUNNEL ────────────────────────────────────── */
+.funnel-wrap{display:flex;flex-direction:column;gap:4px;max-width:650px;margin:56px auto 0;}
+.f-step{padding:17px 26px;display:flex;align-items:center;gap:22px;clip-path:polygon(0 0,100% 0,96% 100%,4% 100%);transition:filter .3s;}
+.f-step:hover{filter:brightness(1.2);}
+.f-num{font-family:'Bebas Neue',sans-serif;font-size:32px;opacity:.35;flex-shrink:0;width:38px;line-height:1;}
+.f-name{font-size:14px;font-weight:500;}
+.f-desc{font-size:11px;opacity:.65;margin-top:3px;}
+.f-pct{margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:24px;opacity:.5;flex-shrink:0;}
+.f1{background:rgba(200,169,110,.22);width:100%;}
+.f2{background:rgba(200,169,110,.30);width:90%;align-self:center;}
+.f3{background:rgba(200,169,110,.38);width:78%;align-self:center;}
+.f4{background:rgba(200,169,110,.48);width:64%;align-self:center;}
+.f5{background:rgba(200,169,110,.62);width:50%;align-self:center;}
+.f6{background:rgba(200,169,110,.80);width:36%;align-self:center;}
+
+/* ─── ADS ───────────────────────────────────────── */
+.ads-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:56px;}
+.ads-card{background:var(--card);padding:30px 26px;border:1px solid rgba(255,255,255,.04);transition:border-color .3s;}
+.ads-card:hover{border-color:rgba(200,169,110,.3);}
+.ads-platform{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.ads-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ads-icon.meta{background:linear-gradient(135deg,#0668E1,#0096FF);}
+.ads-icon.goog{background:linear-gradient(135deg,#4285F4,#34A853);}
+.ads-pname{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;}
+.ads-psub{font-size:10px;color:var(--gray);}
+.ads-list{display:flex;flex-direction:column;gap:11px;}
+.ads-item{display:flex;gap:10px;font-size:12px;color:var(--gray);}
+.ads-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+.ads-dot.e{background:var(--ember);}
+.ads-label{font-weight:500;color:var(--white);}
+
+/* ─── SEO ───────────────────────────────────────── */
+.seo3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;}
+.seo-card{background:var(--card);padding:30px 24px;}
+.seo-card:nth-child(1){border-top:3px solid var(--gold);}
+.seo-card:nth-child(2){border-top:3px solid var(--ember);}
+.seo-card:nth-child(3){border-top:3px solid var(--green);}
+.seo-icon{font-size:26px;margin-bottom:14px;}
+.seo-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.08em;margin-bottom:18px;}
+
+/* ─── SOCIAL ────────────────────────────────────── */
+.social4{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.soc-card{background:var(--card);padding:30px 22px;}
+.soc-card:nth-child(1){border-top:3px solid #E1306C;}
+.soc-card:nth-child(2){border-top:3px solid #1877F2;}
+.soc-card:nth-child(3){border-top:3px solid #25D366;}
+.soc-card:nth-child(4){border-top:3px solid var(--gold);}
+.soc-pname{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.08em;margin-bottom:4px;}
+.soc-sub{font-size:11px;color:var(--gray);margin-bottom:18px;}
+
+/* ─── EMAIL FLOWS ───────────────────────────────── */
+.email3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px;}
+.ef-card{background:var(--card);padding:26px 22px;border:1px solid rgba(255,255,255,.04);}
+.ef-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;margin-bottom:7px;}
+.ef-trigger{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--ember);text-transform:uppercase;margin-bottom:14px;}
+.ef-steps{display:flex;flex-direction:column;gap:9px;}
+.ef-step{display:flex;gap:10px;align-items:flex-start;font-size:11px;color:var(--gray);}
+.ef-num{width:19px;height:19px;border-radius:50%;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.3);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--gold);flex-shrink:0;}
+
+/* ─── ANALYTICS / KPI ───────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.kpi-card{background:var(--card);padding:26px 22px;}
+.kpi-abbr{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.kpi-name{font-size:11px;color:var(--gray);margin-bottom:12px;line-height:1.5;}
+.kpi-num{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--white);line-height:1;margin-bottom:4px;}
+.kpi-target{font-size:10px;color:var(--green);}
+.dash-mock{background:#0a0a0a;border:1px solid var(--border);border-radius:3px;padding:22px;margin-top:32px;}
+.dash-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.dash-head-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;}
+.dash-head-sub{font-size:10px;color:var(--gray);}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.ds-card{background:var(--card);padding:14px;}
+.ds-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--gray);text-transform:uppercase;}
+.ds-val{font-size:20px;font-family:'Bebas Neue',sans-serif;margin:5px 0 3px;}
+.ds-change{font-size:10px;}
+.ds-change.up{color:var(--green);}
+.ds-change.dn{color:var(--ember);}
+.dash-bottom{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
+.dash-chart{background:var(--card);padding:14px;}
+.dash-chart-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--gray);margin-bottom:10px;}
+.dash-bars{display:flex;align-items:flex-end;gap:5px;height:72px;}
+.d-bar{flex:1;background:rgba(200,169,110,.28);border-radius:2px;transition:background .3s;}
+.d-bar:hover{background:rgba(200,169,110,.6);}
+.d-bar.hi{background:var(--gold);}
+.dash-sources{background:var(--card);padding:14px;}
+.ds-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:10px;}
+.ds-row:last-child{border:none;}
+.ds-k{color:var(--gray);}
+.ds-v{font-family:'Space Mono',monospace;color:var(--white);}
+
+/* ─── REVENUE EXPANSION ─────────────────────────── */
+.rev5{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:56px;}
+.rev-card{background:var(--card);padding:26px 20px;}
+.rev-icon{font-size:24px;margin-bottom:14px;}
+.rev-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;margin-bottom:10px;}
+.rev-desc{font-size:11px;color:var(--gray);line-height:1.65;}
+.rev-potential{margin-top:12px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;}
+
+/* ─── OPERATIONAL FLOW ──────────────────────────── */
+.op-flow{display:flex;flex-direction:column;gap:2px;margin-top:56px;}
+.op-row{display:grid;grid-template-columns:60px 200px 1fr auto;gap:0;align-items:stretch;border-bottom:1px solid rgba(255,255,255,.04);}
+.op-num{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);opacity:.2;line-height:1;padding:18px 20px;border-right:1px solid rgba(255,255,255,.04);display:flex;align-items:center;}
+.op-event{padding:18px 22px;border-right:1px solid rgba(255,255,255,.04);display:flex;flex-direction:column;justify-content:center;}
+.op-event-title{font-size:13px;font-weight:500;margin-bottom:4px;}
+.op-event-sub{font-size:11px;color:var(--gray);}
+.op-automation{padding:18px 22px;display:flex;flex-direction:column;justify-content:center;}
+.op-automation-desc{font-size:12px;color:var(--gray);line-height:1.6;}
+.op-badge{padding:18px 22px;display:flex;align-items:center;justify-content:center;min-width:130px;}
+.op-badge-inner{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border:1px solid;text-align:center;}
+.op-badge-inner.auto{border-color:rgba(34,197,94,.35);color:var(--green);}
+.op-badge-inner.manual{border-color:rgba(200,169,110,.35);color:var(--gold);}
+
+/* ─── RISK ──────────────────────────────────────── */
+.risk-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:56px;margin-top:56px;align-items:start;}
+.risk-list{display:flex;flex-direction:column;gap:14px;}
+.risk-item{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:16px 18px;background:var(--card);border-left:2px solid rgba(232,93,58,.4);}
+.risk-icon{font-size:20px;}
+.risk-title{font-size:13px;font-weight:500;margin-bottom:4px;}
+.risk-desc{font-size:11px;color:var(--gray);line-height:1.6;}
+.mitigate-list{display:flex;flex-direction:column;gap:14px;}
+.mit-item{background:var(--card);padding:18px 20px;border-left:2px solid var(--green);}
+.mit-title{font-size:13px;font-weight:500;margin-bottom:5px;}
+.mit-desc{font-size:11px;color:var(--gray);line-height:1.6;}
+
+/* ─── MOBILE APP ────────────────────────────────── */
+.app5{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:56px;}
+.app-card{background:var(--card);padding:26px 20px;}
+.app-icon{font-size:24px;margin-bottom:14px;}
+.app-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;margin-bottom:10px;}
+.app-desc{font-size:11px;color:var(--gray);line-height:1.65;}
+
+/* ─── AI SLIDE ──────────────────────────────────── */
+.ai-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.ai-card{background:var(--card);padding:28px 22px;position:relative;overflow:hidden;}
+.ai-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--gold),transparent);}
+.ai-icon{font-size:24px;margin-bottom:14px;}
+.ai-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;margin-bottom:10px;}
+.ai-desc{font-size:11px;color:var(--gray);line-height:1.65;}
+.ai-badge{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-top:12px;}
+
+/* ─── CONTENT STRATEGY ──────────────────────────── */
+.content6{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;}
+.cs-card{background:var(--card);padding:28px 22px;}
+.cs-icon{font-size:24px;margin-bottom:14px;}
+.cs-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;margin-bottom:10px;}
+.cs-desc{font-size:11px;color:var(--gray);line-height:1.65;}
+
+/* ─── POST LAUNCH ───────────────────────────────── */
+.post-launch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.pl-card{background:var(--card);padding:26px 20px;}
+.pl-icon{font-size:22px;margin-bottom:12px;}
+.pl-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.07em;margin-bottom:10px;}
+.pl-desc{font-size:11px;color:var(--gray);line-height:1.65;}
+
+/* ─── SCALE VISION ──────────────────────────────── */
+.scale-vision{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:56px;align-items:start;}
+.sv-stages{display:flex;flex-direction:column;gap:16px;}
+.sv-stage{background:var(--card);padding:22px 24px;display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:start;}
+.sv-stage-threshold{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);line-height:1;}
+.sv-stage-sub{font-size:10px;color:var(--gray);margin-top:2px;letter-spacing:.06em;}
+.sv-stage-desc{font-size:12px;color:var(--gray);line-height:1.65;}
+.sv-infra{display:flex;flex-direction:column;gap:14px;}
+.sv-infra-item{background:var(--card);padding:18px 20px;border-left:2px solid var(--gold);}
+.sv-infra-title{font-size:13px;font-weight:500;margin-bottom:5px;}
+.sv-infra-desc{font-size:11px;color:var(--gray);line-height:1.6;}
+
+/* ─── PRICING TABS ──────────────────────────────── */
+.pricing-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);flex-wrap:wrap;margin-top:44px;}
+.ptab{padding:13px 26px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;color:var(--gray);transition:all .3s;background:none;border-top:none;border-left:none;border-right:none;position:relative;bottom:-1px;}
+.ptab.active{color:var(--gold);border-bottom:2px solid var(--gold);}
+.ptab:hover{color:var(--white);}
+.pricing-panel{display:none;}
+.pricing-panel.active{display:block;}
+.pkg3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2px;}
+.pkg-card{background:var(--card);padding:38px 30px;position:relative;transition:transform .3s;}
+.pkg-card.hero{background:linear-gradient(135deg,#0d0c08,#1a1408);border:1px solid var(--gold);}
+.pkg-card:hover{transform:translateY(-4px);}
+.pkg-badge{position:absolute;top:-1px;left:30px;background:var(--gold);color:var(--black);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;padding:4px 10px;text-transform:uppercase;}
+.pkg-tier{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+.pkg-name{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:.04em;line-height:1;margin-bottom:4px;}
+.pkg-tagline{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:var(--gray);margin-bottom:26px;}
+.price-box{background:rgba(255,255,255,.02);border:1px solid var(--border);padding:18px;margin-bottom:22px;}
+.price-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.price-type{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--gray);text-transform:uppercase;}
+.price-amt{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);letter-spacing:.02em;}
+.price-amt.hi{color:var(--gold);}
+.price-divider{height:1px;background:var(--border);margin:9px 0;}
+.price-note{font-size:10px;color:var(--gray);margin-top:5px;line-height:1.5;}
+.pkg-cta{display:block;width:100%;padding:12px;text-align:center;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border:1px solid;cursor:pointer;transition:all .3s;margin-top:22px;}
+.cta-out{border-color:rgba(200,169,110,.3);color:var(--white);background:transparent;}
+.cta-out:hover{border-color:var(--gold);background:rgba(200,169,110,.05);}
+.cta-fill{background:var(--gold);color:var(--black);border-color:var(--gold);font-weight:700;}
+.cta-fill:hover{background:#d4b57a;}
+
+/* ─── RETAINER TABLE ────────────────────────────── */
+.ret2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:56px;}
+.ret-card{background:var(--card);padding:30px 26px;border:1px solid rgba(255,255,255,.04);}
+.ret-title{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.08em;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.ret-table{width:100%;border-collapse:collapse;}
+.ret-table tr{border-bottom:1px solid rgba(255,255,255,.04);}
+.ret-table td{padding:9px 3px;font-size:12px;}
+.ret-table td:first-child{color:var(--gray);}
+.ret-table td:last-child{text-align:right;font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);}
+
+/* ─── GROWTH PHASES ─────────────────────────────── */
+.growth5{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:56px;}
+.gp-card{background:var(--card);padding:26px 20px;}
+.gp-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gold);opacity:.2;line-height:1;margin-bottom:14px;}
+.gp-lbl{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:7px;}
+.gp-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.06em;margin-bottom:14px;line-height:1.2;}
+.gp-tl{margin-top:14px;padding-top:10px;border-top:1px solid var(--border);font-family:'Space Mono',monospace;font-size:9px;color:var(--gray);}
+
+/* ─── QUESTIONNAIRE ─────────────────────────────── */
+.quest3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px;}
+.quest-cat-head{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.quest-cat-icon{font-size:18px;}
+.quest-cat-name{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.1em;color:var(--gold);}
+.quest-items{display:flex;flex-direction:column;gap:12px;}
+.quest-item{background:var(--card);padding:13px 15px;border-left:2px solid rgba(200,169,110,.18);font-size:12px;line-height:1.6;color:var(--gray);transition:border-color .3s;}
+.quest-item:hover{border-color:var(--gold);}
+.quest-item strong{color:var(--white);display:block;margin-bottom:3px;font-size:12px;}
+
+/* ─── INTERNAL COSTS ────────────────────────────── */
+.int-banner{background:linear-gradient(135deg,#1a0505,#0f0808);border:1px solid rgba(232,93,58,.4);padding:22px 32px;margin-bottom:44px;display:flex;align-items:center;gap:18px;}
+.int-lock{font-size:26px;}
+.int-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.1em;color:var(--ember);margin-bottom:3px;}
+.int-sub{font-size:12px;color:var(--gray);}
+.cost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.cost-card{background:var(--card);border:1px solid rgba(255,255,255,.04);padding:26px 22px;}
+.cost-cat{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ember);text-transform:uppercase;margin-bottom:14px;}
+.cost-items{display:flex;flex-direction:column;gap:9px;}
+.cost-item{display:flex;justify-content:space-between;align-items:center;}
+.cost-name{font-size:12px;color:var(--gray);}
+.cost-val{font-family:'Space Mono',monospace;font-size:11px;color:var(--white);}
+.cost-divider{height:1px;background:rgba(255,255,255,.04);margin:11px 0;}
+.cost-total{display:flex;justify-content:space-between;align-items:center;}
+.cost-total-label{font-size:12px;font-weight:500;}
+.cost-total-val{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ember);}
+
+/* ─── FINAL VISION ──────────────────────────────── */
+.vision-grid{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+.vision-left{padding:90px 80px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);}
+.vision-right{background:var(--dark);padding:90px 80px;display:flex;flex-direction:column;justify-content:center;}
+.vision-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7vw,96px);line-height:.9;margin:18px 0 32px;letter-spacing:.02em;}
+.eco-list{display:flex;flex-direction:column;gap:18px;}
+.eco-item{display:flex;align-items:flex-start;gap:18px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.eco-num{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--gold);opacity:.28;line-height:1;flex-shrink:0;}
+.eco-title{font-size:13px;font-weight:500;margin-bottom:5px;letter-spacing:.04em;}
+.eco-desc{font-size:12px;color:var(--gray);line-height:1.6;}
+
+/* ─── RESPONSIVE ────────────────────────────────── */
+@media(max-width:1200px){
+  .fail-grid,.rev5,.app5,.ai-grid{grid-template-columns:repeat(3,1fr);}
+  .feat-grid{grid-template-columns:repeat(3,1fr);}
+  .plat4,.bench-grid,.why-arch-grid{grid-template-columns:repeat(2,1fr);}
+  .growth5{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:1024px){
+  .cover-right,.vision-right{display:none;}
+  .cover-grid,.vision-grid{grid-template-columns:1fr;}
+  .grid2,.eco-map,.perf-grid,.risk-grid,.scale-vision{grid-template-columns:1fr;}
+  .tech3,.seo3,.sec3,.grid3,.ux-6,.ds-grid,.content6{grid-template-columns:1fr 1fr;}
+  .roadmap4,.phase-card{grid-template-columns:1fr 1fr;}
+  .pkg3{grid-template-columns:1fr;}
+  .ads-grid,.ret2{grid-template-columns:1fr;}
+  .bench-grid,.plat4,.ai-grid{grid-template-columns:1fr 1fr;}
+  .social4{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .content,.pad{padding:60px 6vw;}
+  .tech3,.seo3,.sec3,.grid3,.ux-6,.ds-grid,.content6,.bench-grid,.plat4,.ai-grid,.social4,.email3,.quest3,.growth5,.rev5,.app5,.cost-grid,.post-launch-grid,.fail-grid{grid-template-columns:1fr;}
+  .roadmap4{display:flex;flex-direction:column;}
+  .cover-left{padding:60px 6vw;}
+  .stat-row{grid-template-columns:1fr 1fr;}
+  .matrix-table{font-size:10px;}
+  .op-row{grid-template-columns:1fr;}
+}
+</style>
 </head>
-
 <body>
-    <div class="parallax1">
-        <div class="head">
-            WHAT IS LIFE ?
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="slide-nav" id="slideNav"></nav>
+
+<!-- ══════════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════ -->
+<section id="s-cover" style="background:var(--black);padding:0;">
+  <div class="cover-grid content" style="padding:0;">
+    <div class="cover-left">
+      <div><div class="cover-eyebrow">Digital Commerce Ecosystem Strategy · 2025</div></div>
+      <div>
+        <div class="cover-title">SOLE<span>//</span><br>SYSTEM</div>
+        <p class="cover-subtitle">A complete digital transformation blueprint for the next generation of sneaker & streetwear commerce.</p>
+      </div>
+      <div class="cover-meta">
+        <div class="cover-meta-item">PREPARED FOR <span>[ YOUR BRAND ]</span></div>
+        <div class="cover-meta-item">TYPE <span>Premium D2C Strategy Deck</span></div>
+        <div class="cover-meta-item">VERSION <span>2.0 · Confidential</span></div>
+        <div style="margin-top:20px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.3em;color:rgba(255,255,255,.18)">STREETWEAR · DIGITAL · ECOSYSTEM</div>
+      </div>
+    </div>
+    <div class="cover-right">
+      <div class="cover-bg-word">SOLE</div>
+      <div class="cover-shoe">
+        <svg class="shoe-svg" viewBox="0 0 600 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sg1" x1="0" y1="0" x2="600" y2="360" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#C8A96E" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#8B6B3D" stop-opacity=".5"/>
+            </linearGradient>
+          </defs>
+          <path d="M80 280 Q300 318 520 268 L540 298 Q300 358 60 308 Z" fill="url(#sg1)" opacity=".65"/>
+          <path d="M80 250 Q300 283 520 238 L520 268 Q300 318 80 280 Z" fill="#1a1a1a"/>
+          <path d="M120 132 Q180 82 300 92 Q420 102 500 162 L520 238 Q300 283 80 250 Z" fill="#1e1e1e"/>
+          <path d="M80 250 L120 132 Q90 180 78 220 Z" fill="#161616"/>
+          <path d="M482 172 Q512 182 522 240 L502 240 Q507 200 482 172 Z" fill="#161616"/>
+          <path d="M162 212 Q282 182 422 197" stroke="url(#sg1)" stroke-width="2.5" fill="none" opacity=".8"/>
+          <path d="M182 235 Q292 212 432 222" stroke="url(#sg1)" stroke-width="1.5" fill="none" opacity=".5"/>
+          <path d="M202 142 Q242 127 282 137 Q322 127 362 137 Q402 127 442 142" stroke="#C8A96E" stroke-width="1.5" fill="none" stroke-dasharray="8 4" opacity=".6"/>
+          <ellipse cx="300" cy="302" rx="200" ry="28" fill="#C8A96E" opacity=".05"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll to Explore</span><div class="scroll-arrow"></div></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     PART 1 DIVIDER
+══════════════════════════════════════════════════ -->
+<section class="part-div" id="s-p1div">
+  <div class="part-div-bg">BRAND</div>
+  <div class="part-div-inner">
+    <div class="part-div-eyebrow">Part One — Brand & Platform Strategy</div>
+    <div class="part-div-title">PLATFORM<br>STRATEGY</div>
+    <div class="part-div-sub">Architecture, experience, and ecosystem — built for cultural brands.</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S01 — MANIFESTO
+══════════════════════════════════════════════════ -->
+<section id="s-manifesto" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">01 — The Vision</div>
+    <div style="height:36px"></div>
+    <div class="manifesto-text">
+      <span class="dim">A shoe</span> is not<br>
+      just a product.<br>
+      <span class="hi">It is culture.</span><br>
+      <span class="dim">Your website</span> is not<br>
+      just a store.<br>
+      <span class="hi">It is a world.</span>
+    </div>
+    <p style="max-width:520px;color:var(--gray);font-size:14px;line-height:1.8;margin-top:44px;">The most powerful streetwear brands of this decade are not competing on product alone. They are building digital worlds — immersive commerce ecosystems that transform visitors into communities, transactions into rituals, and drops into events.<br><br>This is not a proposal for a website. This is a blueprint for your digital universe.</p>
+    <div class="stat-row" style="margin-top:64px;">
+      <div><div class="big-num">₹89,000 Cr</div><div class="stat-label">Indian Fashion E-Commerce by 2027</div></div>
+      <div><div class="big-num">87%</div><div class="stat-label">Gen Z Buyers Research on Mobile First</div></div>
+      <div><div class="big-num">4.2×</div><div class="stat-label">Higher LTV from Community-Led Brands</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S02 — WHY BRANDS FAIL
+══════════════════════════════════════════════════ -->
+<section id="s-fail" style="background:var(--black);">
+  <div class="content">
+    <div class="label">02 — Strategic Insight</div>
+    <div class="sec-title">Why Most<br><span style="color:var(--ember)">Streetwear Brands</span><br>Fail Online</div>
+    <p class="sec-sub">Understanding what breaks other brands is the first step to building one that lasts.</p>
+    <div class="fail-grid">
+      <div class="fail-card"><div class="fail-icon">🎨</div><div class="fail-title">Weak Brand Identity</div><div class="fail-desc">No visual system. Looks like every other drop-brand. Indistinguishable on a feed.</div></div>
+      <div class="fail-card"><div class="fail-icon">📱</div><div class="fail-title">Poor Mobile Experience</div><div class="fail-desc">78% of buyers are on mobile. A desktop-first site loses most of its audience before page 2.</div></div>
+      <div class="fail-card"><div class="fail-icon">🐌</div><div class="fail-title">Slow Loading Speed</div><div class="fail-desc">Every 1 second of delay costs 7% in conversions. Slow sites are invisible sites.</div></div>
+      <div class="fail-card"><div class="fail-icon">🔍</div><div class="fail-title">Zero SEO Foundation</div><div class="fail-desc">No Google visibility. 100% dependent on paid ads that stop working the moment you stop paying.</div></div>
+      <div class="fail-card"><div class="fail-icon">📸</div><div class="fail-title">Instagram-Only Strategy</div><div class="fail-desc">Algorithm changes overnight. One platform dependency is one outage away from zero sales.</div></div>
+      <div class="fail-card"><div class="fail-icon">🔄</div><div class="fail-title">No Customer Retention</div><div class="fail-desc">Paying to acquire customers once, then letting them vanish. No email flows, no loyalty, no community.</div></div>
+      <div class="fail-card"><div class="fail-icon">📊</div><div class="fail-title">No Analytics Systems</div><div class="fail-desc">Flying blind. No idea which product pages convert, where users drop off, or what ads actually work.</div></div>
+      <div class="fail-card"><div class="fail-icon">🛒</div><div class="fail-title">Broken Checkout Flow</div><div class="fail-desc">Complicated, slow, or untrustworthy checkout kills 70% of customers who added to cart.</div></div>
+      <div class="fail-card"><div class="fail-icon">📖</div><div class="fail-title">No Brand Story</div><div class="fail-desc">Products without narrative. No reason to care beyond price. Zero emotional connection to the brand.</div></div>
+      <div class="fail-card"><div class="fail-icon">📉</div><div class="fail-title">No Scale Planning</div><div class="fail-desc">Platform collapses during a drop event. No infrastructure for growth. Rebuilding from scratch at Year 2.</div></div>
+    </div>
+    <div class="fail-solution">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;margin-bottom:6px;">How This Ecosystem Solves Every Single One — <span style="color:var(--gold)">From Day 1</span></div>
+      <div class="fail-sol-grid">
+        <div class="fail-sol-item">Premium brand design system built into every pixel</div>
+        <div class="fail-sol-item">Mobile-first architecture, every screen touch-optimised</div>
+        <div class="fail-sol-item">Sub-2s page load via CDN + Next.js SSR architecture</div>
+        <div class="fail-sol-item">SEO infrastructure baked into site structure from launch</div>
+        <div class="fail-sol-item">Multi-channel ecosystem: SEO + Ads + Email + Social</div>
+        <div class="fail-sol-item">Automated email flows + loyalty system from Week 1</div>
+        <div class="fail-sol-item">Full analytics stack: GA4 + Meta Pixel + custom dashboard</div>
+        <div class="fail-sol-item">Friction-free checkout targeting sub-60s transactions</div>
+        <div class="fail-sol-item">Editorial storytelling woven into every product experience</div>
+        <div class="fail-sol-item">Scalable modular architecture built to evolve with revenue</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S03 — CUSTOMER JOURNEY
+══════════════════════════════════════════════════ -->
+<section id="s-journey" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">03 — Customer Journey</div>
+    <div class="sec-title">From <span style="color:var(--gold)">Stranger</span><br>to Superfan</div>
+    <p class="sec-sub">Every touchpoint in this journey is engineered, measured, and optimised. Nothing is left to chance.</p>
+    <div class="journey-flow">
+      <div class="journey-row">
+        <div class="journey-step-num">01</div>
+        <div class="journey-step-body"><div class="journey-step-title">DISCOVERY — They Find You</div><div class="journey-step-desc">Instagram Reel, Google search, influencer post, YouTube ad, or word-of-mouth share. First impression is everything.</div></div>
+        <div class="journey-tags"><div class="journey-tag gold">Meta Ads</div><div class="journey-tag gold">SEO</div><div class="journey-tag gold">Influencer</div></div>
+      </div>
+      <div class="journey-row">
+        <div class="journey-step-num">02</div>
+        <div class="journey-step-body"><div class="journey-step-title">ARRIVAL — They Land on Your Site</div><div class="journey-step-desc">Cinematic homepage. Premium design immediately communicates brand credibility. Meta Pixel fires. Retargeting audience begins building.</div></div>
+        <div class="journey-tags"><div class="journey-tag gold">Pixel Fires</div><div class="journey-tag ember">Retarget Ready</div></div>
+      </div>
+      <div class="journey-row">
+        <div class="journey-step-num">03</div>
+        <div class="journey-step-body"><div class="journey-step-title">EXPLORATION — Product Discovery</div><div class="journey-step-desc">Editorial collections, lookbook grids, AI recommendations, size guides, social proof layers. Dwell time increases. Scroll depth tracked.</div></div>
+        <div class="journey-tags"><div class="journey-tag gold">Session Data</div><div class="journey-tag gold">AI Recs</div></div>
+      </div>
+      <div class="journey-row">
+        <div class="journey-step-num">04</div>
+        <div class="journey-step-body"><div class="journey-step-title">INTENT — Wishlist & Cart</div><div class="journey-step-desc">Add to wishlist triggers back-in-stock alerts. Cart addition fires conversion event to Meta + Google. Abandoned cart sequence arms.</div></div>
+        <div class="journey-tags"><div class="journey-tag ember">Cart Event</div><div class="journey-tag ember">Email Armed</div></div>
+      </div>
+      <div class="journey-row">
+        <div class="journey-step-num">05</div>
+        <div class="journey-step-body"><div class="journey-step-title">PURCHASE — Checkout & Payment</div><div class="journey-step-desc">Express checkout. UPI/Card/COD. Order confirmation email fired. Loyalty points added. Shipping webhook triggered. Invoice generated.</div></div>
+        <div class="journey-tags"><div class="journey-tag green">Conversion</div><div class="journey-tag green">Points Added</div></div>
+      </div>
+      <div class="journey-row">
+        <div class="journey-step-num">06</div>
+        <div class="journey-step-body"><div class="journey-step-title">DELIVERY — Post-Purchase Experience</div><div class="journey-step-desc">Real-time shipping updates via email + WhatsApp. Review request at Day 10. Repeat purchase sequence begins at Day 30.</div></div>
+        <div class="journey-tags"><div class="journey-tag gold">Automation</div><div class="journey-tag gold">Review Flow</div></div>
+      </div>
+      <div class="journey-row">
+        <div class="journey-step-num">07</div>
+        <div class="journey-step-body"><div class="journey-step-title">RETARGETING — Bring Them Back</div><div class="journey-step-desc">Dynamic product ads for items they viewed. New arrival announcements. Drop event retargeting. Email sequence personalised to purchase history.</div></div>
+        <div class="journey-tags"><div class="journey-tag ember">Dynamic Ads</div><div class="journey-tag ember">Personalised</div></div>
+      </div>
+      <div class="journey-row">
+        <div class="journey-step-num">08</div>
+        <div class="journey-step-body"><div class="journey-step-title">LOYALTY — Community Member</div><div class="journey-step-desc">Tiered loyalty program. Exclusive drop access. Referral rewards. Community events. From customer to brand ambassador.</div></div>
+        <div class="journey-tags"><div class="journey-tag green">LTV 3×</div><div class="journey-tag green">Ambassador</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S04 — COMPETITOR BENCHMARKING
+══════════════════════════════════════════════════ -->
+<section id="s-bench" style="background:var(--black);">
+  <div class="content">
+    <div class="label">04 — Market Benchmarking</div>
+    <div class="sec-title">Learning From<br><span style="color:var(--gold)">The Best</span></div>
+    <p class="sec-sub">We study brands that are winning in this space — not to copy them, but to identify the whitespace they've left open for you.</p>
+    <div class="bench-grid">
+      <div class="bench-card">
+        <div class="bench-brand">CREPDOG CREW</div>
+        <div class="bench-type">India · Premium Sneaker Retail</div>
+        <div class="bench-metrics">
+          <div class="bench-metric"><span class="bench-metric-label">Brand Identity</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:90%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">9/10</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Community System</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:85%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">8.5</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Mobile UX</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:75%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">7.5</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Drop System</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:88%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">8.8</span></div>
         </div>
-    </div>
-    <section>
-        <h1>THE STORY OF LIFE</h1>
-        <div>
-            <p>
-                Life brings us as many joyful moments as it does downfalls, and although there are days we wish there
-                was a manual to follow, it simply wouldn’t be the same without the spontaneity. The journey of life may
-                not become easier as we grow older, but we do seem to understand it better as our perspectives evolve.
-                Whether you’re embarking on a new adventure right out of school or you want to explore different paths
-                in your personal life, it’s never too late to change what the future looks like.Since we as human beings
-                developed the ability to think rationally and analyze our surroundings, we have been curious about why
-                things are the way that they are.
-                Muslims believe that Almighty Allah is the only creator of this world and all other things which are
-                present in this world. Everyone in this world thinks about what’s the purpose of our life? Why have we
-                been created? Why are we here in this world? As a Muslim we believe that there is only One Creator Who
-                created us and we acknowledged Him, we all know that He created us (humankind) to serve Him. Now the
-                question comes to mind that How we can serve Him? There is a reason behind the creation of this world
-                and humankind. In the Holy Quran, Almighty Allah Almighty mentioned the reason of creation of this world
-                that is: “And to Allah belongs the dominion of the heavens and the earth, and Allah is over all things
-                competent. Indeed, in the creation of the heavens and the earth and the alternation of the night and the
-                day are signs for those of understanding.The reason of knowing and understanding of the purpose of life
-                and human existence by Muslims is due to the fact that Allah Almighty has given us the book Quran which
-                contains all the guidance related to the life of this world. If we want to know about the meaning of
-                life then we have to understand it through Holy Quran because all the answers are present in Holy Quran.
-
-            </p>
+        <div class="bench-opp"><strong>Your Opportunity</strong>Superior mobile-first design, better personalisation, and a more immersive editorial product experience could set you apart in this same market.</div>
+      </div>
+      <div class="bench-card">
+        <div class="bench-brand">VEGNON VEG</div>
+        <div class="bench-type">India · Curated Streetwear</div>
+        <div class="bench-metrics">
+          <div class="bench-metric"><span class="bench-metric-label">Brand Identity</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:88%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">8.8</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Editorial Content</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:92%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">9.2</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">SEO Performance</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:65%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">6.5</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Loyalty Systems</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:60%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">6.0</span></div>
         </div>
-
-    </section>
-
-    <div class="parallax2">
-
-
-    </div>
-    <section>
-        <h1>WHY A REASON ?</h1>
-        <p> Everything happens for a reason. From every experience of your life you will see the shadow can't beat the
-            sun, sadness can't beat happiness, anger can't beat smile, frustration can't beat patience, hate can't beat
-            love, inhumanity can't beat kindness, failure can't beat success.
-        </p>
-    </section>
-    <div class="parallax3">
-
-    </div>
-    <div>
-        <section>
-            <h1>TAKE A COFFEE</h1>
-            <p> Why not take a cup of coffee to taste the morning breeze?
-                It will let you know that how simple life can create a beautiful moment.
-                Don't worry if you feel sad because you can easily find beautiful moments from anywhere.
-                Beautiful moments belong to happiness.
-            </p>
-        </section>
-
-    </div>
-    <div class="parallax4">
-        <div class="head">
-            The End...
+        <div class="bench-opp"><strong>Your Opportunity</strong>Their SEO is weak and loyalty infrastructure is minimal. A brand with better organic search and a real rewards ecosystem could capture their audience long-term.</div>
+      </div>
+      <div class="bench-card">
+        <div class="bench-brand">NIKE INDIA</div>
+        <div class="bench-type">Global · Premium Athletic</div>
+        <div class="bench-metrics">
+          <div class="bench-metric"><span class="bench-metric-label">Brand System</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:100%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">10</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Mobile App</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:95%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">9.5</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Drop Architecture</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:95%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">9.5</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">India Localisation</span><div class="bench-bar-wrap"><div class="bench-bar" style="width:55%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">5.5</span></div>
         </div>
+        <div class="bench-opp"><strong>Your Opportunity</strong>Nike doesn't localise deeply for India — cultural storytelling, regional language support, and India-specific drop culture are whitespace a local brand can own.</div>
+      </div>
+      <div class="bench-card">
+        <div class="bench-brand">YOUR BRAND</div>
+        <div class="bench-type">India · Next-Gen D2C</div>
+        <div class="bench-metrics">
+          <div class="bench-metric"><span class="bench-metric-label">Brand Identity</span><div class="bench-bar-wrap"><div class="bench-bar" style="background:rgba(200,169,110,.3);width:85%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">Built</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">SEO Dominance</span><div class="bench-bar-wrap"><div class="bench-bar" style="background:rgba(200,169,110,.3);width:90%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">Year 1</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">Loyalty + Community</span><div class="bench-bar-wrap"><div class="bench-bar" style="background:rgba(200,169,110,.3);width:88%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">Phase 2</span></div>
+          <div class="bench-metric"><span class="bench-metric-label">India Localisation</span><div class="bench-bar-wrap"><div class="bench-bar" style="background:var(--gold);width:95%"></div></div><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold)">Native</span></div>
+        </div>
+        <div class="bench-opp" style="background:rgba(200,169,110,.08);border-left-color:var(--gold);"><strong style="color:var(--gold)">The Differentiator</strong>Deep India localisation + superior UX + SEO + loyalty ecosystem + drop culture infrastructure. This is the combination no one in India has fully executed yet.</div>
+      </div>
     </div>
-    <footer>
-         Copyright © 2020 - All rights Reserved - Designed by AhsanParadise
-    </footer>
+  </div>
+</section>
 
-</body>
+<!-- ══════════════════════════════════════════════════
+     S05 — WEBSITE EXPERIENCE
+══════════════════════════════════════════════════ -->
+<section id="s-ux" style="background:linear-gradient(135deg,#080808,#111,#0a0a0a);">
+  <div class="content">
+    <div class="label">05 — Experience Design</div>
+    <div class="sec-title">Designed for<br><span style="color:var(--gold)">Impact</span>, Not Just<br>Interface</div>
+    <div class="ux-6" style="margin-top:56px;">
+      <div class="ux-card"><div class="ux-icon">◈</div><div class="ux-title">Cinematic Hero Sections</div><div class="ux-desc">Full-viewport immersive hero with ambient video, parallax photography, editorial typography overlays, and micro-interaction reveals that communicate luxury on first scroll.</div></div>
+      <div class="ux-card"><div class="ux-icon">⬡</div><div class="ux-title">Editorial Collections</div><div class="ux-desc">Products presented as fashion editorials — full bleed imagery, overlapping text systems, seasonal lookbook grids, and story-driven navigation that sells lifestyle, not just SKUs.</div></div>
+      <div class="ux-card"><div class="ux-icon">◎</div><div class="ux-title">Product Universe Pages</div><div class="ux-desc">Product pages designed as brand experiences — 360° photography, material zoom, size guides, scarcity signals, social proof layers, and contextual styling modules.</div></div>
+      <div class="ux-card"><div class="ux-icon">⬢</div><div class="ux-title">Drop Event Pages</div><div class="ux-desc">Dedicated landing experiences for limited releases — countdown modules, access-gated raffle entries, waitlist systems, and anticipation-building notification flows.</div></div>
+      <div class="ux-card"><div class="ux-icon">◉</div><div class="ux-title">Premium Navigation</div><div class="ux-desc">Mega-menu with visual category previews, persistent cart summaries, search with visual autocomplete, and mobile bottom navigation — designed for browsing at speed.</div></div>
+      <div class="ux-card"><div class="ux-icon">◫</div><div class="ux-title">Mobile-First Interactions</div><div class="ux-desc">Every interaction designed touch-first — swipe gestures, thumb-zone optimised layouts, haptic-ready CTAs, and accelerated mobile checkout targeting sub-60s transactions.</div></div>
+    </div>
+  </div>
+</section>
 
-</html>
+<!-- ══════════════════════════════════════════════════
+     S06 — ECOMMERCE ENGINE
+══════════════════════════════════════════════════ -->
+<section id="s-ecom" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">06 — Commerce Engine</div>
+    <div class="sec-title">Every Feature.<br><span style="color:var(--gold)">Zero Compromise.</span></div>
+    <div class="feat-grid" style="margin-top:56px;">
+      <div class="feat-box"><div class="feat-icon">🗂</div><div class="feat-name">Product Catalog System</div><div class="feat-desc">Multi-variant SKUs, size/colour matrices, inventory tracking, and collection taxonomies built for scale.</div></div>
+      <div class="feat-box"><div class="feat-icon">🔐</div><div class="feat-name">Authentication & Accounts</div><div class="feat-desc">Social login (Google, Apple), OTP mobile auth, JWT sessions, and role-based access for admin systems.</div></div>
+      <div class="feat-box"><div class="feat-icon">🛒</div><div class="feat-name">Smart Cart & Checkout</div><div class="feat-desc">Persistent cart, abandoned cart recovery, express checkout, address autofill, and one-tap payment.</div></div>
+      <div class="feat-box"><div class="feat-icon">💳</div><div class="feat-name">Payment Infrastructure</div><div class="feat-desc">Razorpay, Cashfree, PhonePe, UPI, BNPL, COD — full stack with 3DS2 security and webhook verification.</div></div>
+      <div class="feat-box"><div class="feat-icon">📦</div><div class="feat-name">Order Management</div><div class="feat-desc">Real-time tracking, status pipelines, Shiprocket/Delhivery integration, shipping labels, and notifications.</div></div>
+      <div class="feat-box"><div class="feat-icon">🎫</div><div class="feat-name">Coupon & Flash Sale Engine</div><div class="feat-desc">BOGO, % off, flat discount, minimum cart, single-use codes, time-limited flash sales, and bulk coupons.</div></div>
+      <div class="feat-box"><div class="feat-icon">📊</div><div class="feat-name">Analytics Dashboard</div><div class="feat-desc">Real-time sales metrics, acquisition funnels, product performance, cohort analysis, and revenue attribution.</div></div>
+      <div class="feat-box"><div class="feat-icon">✍️</div><div class="feat-name">CMS & Admin Panel</div><div class="feat-desc">Custom admin — inventory, content, orders, customers, and marketing tools in one clean interface.</div></div>
+      <div class="feat-box"><div class="feat-icon">💌</div><div class="feat-name">Email & Notification Flows</div><div class="feat-desc">Order confirm, shipping updates, abandoned cart sequences, drop announcements via SendGrid + MSG91.</div></div>
+      <div class="feat-box"><div class="feat-icon">🔍</div><div class="feat-name">SEO Architecture</div><div class="feat-desc">Schema markup, dynamic meta, sitemap generation, canonical URLs, and structured product data from Day 1.</div></div>
+      <div class="feat-box"><div class="feat-icon">❤️</div><div class="feat-name">Wishlist & Reviews</div><div class="feat-desc">Persistent wishlists, back-in-stock alerts, verified purchase reviews with photo upload and star ratings.</div></div>
+      <div class="feat-box"><div class="feat-icon">🔄</div><div class="feat-name">Returns & Refunds</div><div class="feat-desc">Self-serve return portal, automated refund workflows, return label generation, and restocking pipelines.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S07 — ADVANCED FEATURES
+══════════════════════════════════════════════════ -->
+<section id="s-adv" style="background:var(--black);">
+  <div class="content">
+    <div class="label">07 — Next-Gen Capabilities</div>
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:70px;margin-top:0;align-items:start;">
+      <div>
+        <div class="sec-title">Beyond<br><span style="color:var(--gold)">Commerce.</span><br>Into<br>Ecosystem.</div>
+        <p style="font-size:13px;color:var(--gray);line-height:1.8;max-width:340px;margin-top:20px;">These are the features that separate a transactional website from a cultural platform. Each one is a competitive moat that compounds over time.</p>
+        <div style="margin-top:36px;display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;background:var(--gold);border-radius:50%"></div><span style="font-size:11px;color:var(--gray)">Phase 2 — Core Advanced Features</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;background:var(--ember);border-radius:50%"></div><span style="font-size:11px;color:var(--gray)">Phase 3–4 — Ecosystem Scale</span></div>
+        </div>
+      </div>
+      <div class="adv-grid">
+        <div class="adv-feat"><div class="tag tag-gold">Phase 2</div><div class="feat-name">Raffle & Drop Queue</div><div class="feat-desc">Lottery entries, virtual waitlists, real-time queue management, and automated win/loss notifications.</div></div>
+        <div class="adv-feat"><div class="tag tag-gold">Phase 2</div><div class="feat-name">Loyalty & Reward Points</div><div class="feat-desc">Points on purchases, referrals, and social actions. Tiered membership — Standard, Gold, Obsidian.</div></div>
+        <div class="adv-feat"><div class="tag tag-gold">Phase 2</div><div class="feat-name">AI Size Recommendation</div><div class="feat-desc">ML size engine trained on brand data and user foot profiles. Reduces returns, increases conversion.</div></div>
+        <div class="adv-feat"><div class="tag tag-gold">Phase 2</div><div class="feat-name">Influencer & Affiliate</div><div class="feat-desc">Creator dashboards, UTM attribution, commission tracking, payout management, and collab-drop tools.</div></div>
+        <div class="adv-feat"><div class="tag tag-ember">Phase 3</div><div class="feat-name">3D Product Viewer</div><div class="feat-desc">WebGL 360° product visualisation with real-time lighting, material switching, and zoom.</div></div>
+        <div class="adv-feat"><div class="tag tag-ember">Phase 3</div><div class="feat-name">Gamification Engine</div><div class="feat-desc">Purchase-to-unlock badges, collection challenges, leaderboards, and seasonal events for superfans.</div></div>
+        <div class="adv-feat"><div class="tag tag-ember">Phase 3</div><div class="feat-name">AI Chatbot & Stylist</div><div class="feat-desc">Conversational commerce — product discovery, outfit suggestions, order support, size guidance.</div></div>
+        <div class="adv-feat"><div class="tag tag-ember">Phase 4</div><div class="feat-name">Mobile App + AR Try-On</div><div class="feat-desc">React Native app with push notifications, exclusive app-only drops, biometric checkout, and AR.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S08 — TECHNOLOGY DECISION MATRIX
+══════════════════════════════════════════════════ -->
+<section id="s-matrix" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">08 — Technology Decision Matrix</div>
+    <div class="sec-title">Choosing the Right<br><span style="color:var(--gold)">Foundation</span></div>
+    <p class="sec-sub">A consultancy-grade comparison of every major platform option — so you can understand exactly what you're choosing and why.</p>
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Criteria</th>
+          <th>Shopify</th>
+          <th class="rec-col">Headless (★ Rec)</th>
+          <th>WooCommerce</th>
+          <th>MERN Stack</th>
+          <th>Full Custom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Speed to Launch</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Fastest</td>
+          <td class="rec-col"><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot half"></span><span class="score-dot none"></span> Fast</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot half"></span><span class="score-dot none"></span> Fast</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot none"></span><span class="score-dot none"></span><span class="score-dot none"></span> Slow</td>
+          <td><span class="score-dot full"></span><span class="score-dot none"></span><span class="score-dot none"></span><span class="score-dot none"></span><span class="score-dot none"></span> Slowest</td>
+        </tr>
+        <tr>
+          <td>Design Freedom</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot half"></span><span class="score-dot none"></span><span class="score-dot none"></span> Limited</td>
+          <td class="rec-col"><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Complete</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot none"></span><span class="score-dot none"></span> Good</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot none"></span> High</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Complete</td>
+        </tr>
+        <tr>
+          <td>SEO Performance</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot none"></span><span class="score-dot none"></span> Good</td>
+          <td class="rec-col"><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Excellent</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot half"></span><span class="score-dot none"></span><span class="score-dot none"></span> Moderate</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot none"></span> High</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Excellent</td>
+        </tr>
+        <tr>
+          <td>Scalability</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot none"></span> High</td>
+          <td class="rec-col"><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Unlimited</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot half"></span><span class="score-dot none"></span><span class="score-dot none"></span> Limited</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Unlimited</td>
+          <td><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span><span class="score-dot full"></span> Unlimited</td>
+        </tr>
+        <tr>
+          <td>Maintenance Complexity</td>
+          <td style="color:var(--green)">Low — managed</td>
+          <td class="rec-col" style="color:var(--gold)">Medium — dev needed</td>
+          <td style="color:var(--ember)">High — plugin conflicts</td>
+          <td style="color:var(--gold)">Medium</td>
+          <td style="color:var(--ember)">High — full ownership</td>
+        </tr>
+        <tr>
+          <td>Infrastructure Control</td>
+          <td style="color:var(--ember)">None</td>
+          <td class="rec-col" style="color:var(--gold)">Frontend owned</td>
+          <td style="color:var(--gold)">Partial</td>
+          <td style="color:var(--green)">Full</td>
+          <td style="color:var(--green)">Complete</td>
+        </tr>
+        <tr>
+          <td>Platform Fees</td>
+          <td style="color:var(--ember)">₹2K–30K/mo + 2%/txn</td>
+          <td class="rec-col" style="color:var(--gold)">₹2K–15K/mo platform</td>
+          <td style="color:var(--green)">Free (hosting only)</td>
+          <td style="color:var(--green)">₹5–15K/mo hosting only</td>
+          <td style="color:var(--green)">₹5–15K/mo hosting only</td>
+        </tr>
+        <tr>
+          <td>Custom Drop/Raffle Logic</td>
+          <td style="color:var(--ember)">Plugin-dependent</td>
+          <td class="rec-col" style="color:var(--green)">Fully custom ✓</td>
+          <td style="color:var(--ember)">Plugin-dependent</td>
+          <td style="color:var(--green)">Fully custom ✓</td>
+          <td style="color:var(--green)">Fully custom ✓</td>
+        </tr>
+        <tr>
+          <td>Recommended For</td>
+          <td style="color:var(--gray)">Phase 1 MVP</td>
+          <td class="rec-col" style="color:var(--gold);font-weight:500;">Phase 1–3 (Recommended)</td>
+          <td style="color:var(--gray)">Content-first brands</td>
+          <td style="color:var(--gray)">Phase 3+ scaling</td>
+          <td style="color:var(--gray)">Phase 4 enterprise</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S09 — PLATFORM COMPARISON (SIMPLE LANGUAGE)
+══════════════════════════════════════════════════ -->
+<section id="s-plat" style="background:var(--black);">
+  <div class="content">
+    <div class="label">09 — In Plain Language</div>
+    <div class="sec-title">Which Platform<br>is <span style="color:var(--gold)">Right for You?</span></div>
+    <p class="sec-sub">Think of this like choosing between renting a flat, buying one, or building your own house. Each has different costs, freedom, and long-term implications.</p>
+    <div class="plat4">
+      <div class="plat-card">
+        <div class="plat-icon">🏪</div>
+        <div class="plat-name">SHOPIFY</div>
+        <div class="plat-tagline">The ready-made solution</div>
+        <div class="plat-star-row"><span class="plat-star-label">Ease of Use</span><div class="stars"><span class="star-on">★★★★★</span></div></div>
+        <div class="plat-star-row"><span class="plat-star-label">Design Freedom</span><div class="stars"><span class="star-on">★★★</span><span class="star-off">☆☆</span></div></div>
+        <div class="plat-star-row"><span class="plat-star-label">Long-term Ownership</span><div class="stars"><span class="star-on">★★</span><span class="star-off">☆☆☆</span></div></div>
+        <div class="pro-con">
+          <div class="pro-item">Ready to sell in days, not months</div>
+          <div class="pro-item">Huge app store for features</div>
+          <div class="pro-item">No server management needed</div>
+          <div class="con-item">Monthly fee ₹2K–30K + % per sale</div>
+          <div class="con-item">Design looks like other Shopify stores</div>
+          <div class="con-item">Platform can change rules anytime</div>
+        </div>
+        <div class="plat-cost"><div class="plat-cost-val">₹2K–30K/mo</div><div style="font-size:10px;color:var(--gray);margin-top:2px">Platform + transaction fees</div></div>
+      </div>
+      <div class="plat-card star">
+        <div class="plat-star-badge">Best of Both</div>
+        <div class="plat-icon">⚡</div>
+        <div class="plat-name">HEADLESS SHOPIFY</div>
+        <div class="plat-tagline">Custom design, Shopify engine</div>
+        <div class="plat-star-row"><span class="plat-star-label">Ease of Use</span><div class="stars"><span class="star-on">★★★★</span><span class="star-off">☆</span></div></div>
+        <div class="plat-star-row"><span class="plat-star-label">Design Freedom</span><div class="stars"><span class="star-on">★★★★★</span></div></div>
+        <div class="plat-star-row"><span class="plat-star-label">Long-term Ownership</span><div class="stars"><span class="star-on">★★★★</span><span class="star-off">☆</span></div></div>
+        <div class="pro-con">
+          <div class="pro-item">Your site looks exactly how you want it</div>
+          <div class="pro-item">Shopify manages payments & orders</div>
+          <div class="pro-item">Faster & better SEO than plain Shopify</div>
+          <div class="con-item">Needs a developer to build & maintain</div>
+          <div class="con-item">Still pays Shopify monthly fees</div>
+        </div>
+        <div class="plat-cost"><div class="plat-cost-val">₹2K–15K/mo</div><div style="font-size:10px;color:var(--gray);margin-top:2px">Shopify + frontend hosting</div></div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-icon">🏗</div>
+        <div class="plat-name">FULLY CUSTOM</div>
+        <div class="plat-tagline">Build everything from scratch</div>
+        <div class="plat-star-row"><span class="plat-star-label">Ease of Use</span><div class="stars"><span class="star-on">★★★</span><span class="star-off">☆☆</span></div></div>
+        <div class="plat-star-row"><span class="plat-star-label">Design Freedom</span><div class="stars"><span class="star-on">★★★★★</span></div></div>
+        <div class="plat-star-row"><span class="plat-star-label">Long-term Ownership</span><div class="stars"><span class="star-on">★★★★★</span></div></div>
+        <div class="pro-con">
+          <div class="pro-item">100% yours — no platform fees ever</div>
+          <div class="pro-item">Build any feature imaginable</div>
+          <div class="pro-item">No transaction fees = more profit</div>
+          <div class="con-item">Takes 3–5 months to build properly</div>
+          <div class="con-item">Always needs developer for changes</div>
+          <div class="con-item">You manage hosting & security</div>
+        </div>
+        <div class="plat-cost"><div class="plat-cost-val">₹5K–15K/mo</div><div style="font-size:10px;color:var(--gray);margin-top:2px">Hosting only, no platform fee</div></div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-icon">🚀</div>
+        <div class="plat-name">SMART MIGRATION</div>
+        <div class="plat-tagline">Start simple, scale smart</div>
+        <div style="margin:16px 0;font-size:12px;color:var(--gray);line-height:1.7;">The smartest path for most new brands — start on Shopify to launch fast, then migrate to fully custom when your revenue justifies it.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+          <div style="padding:10px 12px;background:rgba(200,169,110,.06);border:1px solid rgba(200,169,110,.2);font-size:11px;"><strong style="color:var(--white)">Phase 1–2:</strong> <span style="color:var(--gray)">Shopify — launch fast, start selling</span></div>
+          <div style="padding:10px 12px;background:rgba(200,169,110,.09);border:1px solid rgba(200,169,110,.25);font-size:11px;"><strong style="color:var(--white)">Phase 3:</strong> <span style="color:var(--gray)">Headless — premium design, more power</span></div>
+          <div style="padding:10px 12px;background:rgba(200,169,110,.14);border:1px solid rgba(200,169,110,.4);font-size:11px;"><strong style="color:var(--white)">Phase 4:</strong> <span style="color:var(--gray)">Fully Custom — total ownership</span></div>
+        </div>
+        <div class="plat-cost"><div class="plat-cost-val">Evolves With You</div><div style="font-size:10px;color:var(--gray);margin-top:2px">Cost scales only when revenue justifies it</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S10 — WHY THIS ARCHITECTURE
+══════════════════════════════════════════════════ -->
+<section id="s-arch" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">10 — Architecture Reasoning</div>
+    <div class="sec-title">Why We Build<br><span style="color:var(--gold)">The Way We Do</span></div>
+    <p class="sec-sub">Every technical decision has a strategic reason. Here's the thinking behind the architecture recommendations in this deck.</p>
+    <div class="why-arch-grid">
+      <div class="why-arch-card highlight">
+        <div class="why-num">01</div>
+        <div class="why-title">NEXT.JS FIRST</div>
+        <div class="why-body">Next.js gives us the best of both worlds — server-side rendering for SEO and speed, combined with rich client-side interactions for premium UX. It's the framework used by the world's most ambitious digital brands.</div>
+      </div>
+      <div class="why-arch-card">
+        <div class="why-num">02</div>
+        <div class="why-title">MOBILE-FIRST BUILD</div>
+        <div class="why-body">78%+ of your customers will buy on mobile. We design and develop mobile first — then scale up to desktop. Not the other way around. This directly impacts conversion rates and SEO rankings.</div>
+      </div>
+      <div class="why-arch-card">
+        <div class="why-num">03</div>
+        <div class="why-title">SEO BAKED IN FROM DAY 1</div>
+        <div class="why-body">SEO cannot be "added later." It must be part of the site architecture from the first line of code. We build URL structures, metadata systems, and schema markup into the foundation — not as an afterthought.</div>
+      </div>
+      <div class="why-arch-card">
+        <div class="why-num">04</div>
+        <div class="why-title">SHOPIFY AS STARTING POINT</div>
+        <div class="why-body">For most new brands, Shopify eliminates weeks of backend development. You start selling faster. Once you hit ₹5–10L/month and need deeper control, we migrate to custom — with all your data and history intact.</div>
+      </div>
+      <div class="why-arch-card">
+        <div class="why-num">05</div>
+        <div class="why-title">MODULAR ARCHITECTURE</div>
+        <div class="why-body">Everything is built as modules. Drop system, loyalty, affiliate, reviews — each one can be added, replaced, or upgraded independently. You're never rebuilding the whole platform to add a new feature.</div>
+      </div>
+      <div class="why-arch-card">
+        <div class="why-num">06</div>
+        <div class="why-title">EDGE CDN DEPLOYMENT</div>
+        <div class="why-body">Your site is served from servers closest to each visitor — Delhi, Mumbai, Bangalore. Pages load in under 1.5 seconds anywhere in India. Speed is a conversion multiplier, not just a technical metric.</div>
+      </div>
+      <div class="why-arch-card">
+        <div class="why-num">07</div>
+        <div class="why-title">HEADLESS CMS SYSTEM</div>
+        <div class="why-body">Content (products, blogs, banners, drops) is managed separately from the website code. Your marketing team can update the site independently, without touching any code — ever.</div>
+      </div>
+      <div class="why-arch-card">
+        <div class="why-num">08</div>
+        <div class="why-title">MIGRATION-READY FROM BUILD</div>
+        <div class="why-body">We build with migration in mind. Your data models, API structure, and content are platform-agnostic from Day 1. When you outgrow Shopify, moving to fully custom is an evolution — not a rebuild.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S11 — SCALABILITY VS COST GRAPH
+══════════════════════════════════════════════════ -->
+<section id="s-scalecost" style="background:var(--black);">
+  <div class="content">
+    <div class="label">11 — Scale vs Cost Analysis</div>
+    <div class="sec-title">How Architecture<br><span style="color:var(--gold)">Costs Evolve</span></div>
+    <p class="sec-sub">The right architecture today is not necessarily the right architecture forever. Here's how costs and capabilities evolve as your brand scales.</p>
+    <div class="scale-graph">
+      <div class="scale-row" style="border-bottom:1px solid var(--border);padding-bottom:20px;">
+        <div></div>
+        <div style="text-align:center;padding:0 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--gray)">SHOPIFY</div>
+        <div style="text-align:center;padding:0 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--gold)">HEADLESS (★)</div>
+        <div style="text-align:center;padding:0 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--gray)">FULL CUSTOM</div>
+      </div>
+      <div class="scale-row" style="margin-top:16px;">
+        <div class="scale-label">Upfront Build Cost</div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-shopify" style="width:40%">₹75K–1.2L</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-headless" style="width:65%">₹1.8L–3.5L</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-custom" style="width:90%">₹4L–8L+</div></div></div>
+      </div>
+      <div class="scale-row">
+        <div class="scale-label">Monthly Running Cost</div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-shopify" style="width:55%">₹4K–30K/mo</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-headless" style="width:40%">₹10K–20K/mo</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-custom" style="width:30%">₹5K–15K/mo</div></div></div>
+      </div>
+      <div class="scale-row">
+        <div class="scale-label">Scalability Ceiling</div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-shopify" style="width:70%">~₹50L/mo GMV</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-headless" style="width:88%">₹5Cr+/mo GMV</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-custom" style="width:100%">Unlimited</div></div></div>
+      </div>
+      <div class="scale-row">
+        <div class="scale-label">Design Flexibility</div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-shopify" style="width:45%">Template limited</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-headless" style="width:98%">Pixel perfect</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-custom" style="width:100%">Absolute freedom</div></div></div>
+      </div>
+      <div class="scale-row">
+        <div class="scale-label">Long-term Cost at Scale</div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-shopify" style="width:85%">High (% per txn)</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-headless" style="width:55%">Medium</div></div></div>
+        <div class="scale-bar-cell"><div class="scale-bar-outer"><div class="scale-bar-inner bar-custom" style="width:25%">Lowest</div></div></div>
+      </div>
+    </div>
+    <div style="margin-top:32px;padding:22px 28px;background:rgba(200,169,110,.04);border:1px solid var(--border);font-size:13px;color:var(--gray);line-height:1.8;">
+      <strong style="color:var(--white)">Key Insight:</strong> Shopify's transaction percentage (2%) starts to sting at ₹10L+/month GMV. At ₹50L/month, you're paying ₹1L/month just in transaction fees. That's when a custom backend becomes financially superior. We plan for this migration from the beginning.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S12 — DESIGN SYSTEM
+══════════════════════════════════════════════════ -->
+<section id="s-design" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">12 — Design System</div>
+    <div class="sec-title">The Language<br>of <span style="color:var(--gold)">Luxury</span></div>
+    <div class="ds-grid">
+      <div>
+        <div class="ds-block-title">TYPOGRAPHY SYSTEM</div>
+        <div class="type-demo">
+          <div class="type-display">SOLE//01</div>
+          <div class="type-serif">Editorial Headlines</div>
+          <div class="type-body">Body copy — clean, precise, optimised for readability across all screen densities and viewport conditions.</div>
+        </div>
+        <div style="font-size:11px;color:var(--gray);line-height:2;margin-top:16px;">
+          <strong style="color:var(--white)">Display:</strong> Bebas Neue / Impact variants<br>
+          <strong style="color:var(--white)">Editorial:</strong> Playfair Display Italic<br>
+          <strong style="color:var(--white)">Body:</strong> DM Sans 300–500<br>
+          <strong style="color:var(--white)">Data:</strong> Space Mono — labels, numbers<br>
+          <strong style="color:var(--white)">Scale:</strong> 4-step with optical sizing
+        </div>
+      </div>
+      <div>
+        <div class="ds-block-title">COLOUR LANGUAGE</div>
+        <div class="swatch-col">
+          <div class="swatch sw-black"><span>#050505 — Void Black</span></div>
+          <div class="swatch sw-cream"><span>#E8E0D0 — Parchment White</span></div>
+          <div class="swatch sw-gold"><span>#C8A96E — Amber Gold</span></div>
+          <div class="swatch sw-ember"><span>#E85D3A — Ember Red</span></div>
+        </div>
+        <div style="margin-top:18px;font-size:11px;color:var(--gray);line-height:1.8;">High-contrast foundation. Single warm metallic accent. Ember for scarcity signals and urgency. Parchment for premium text applications.</div>
+      </div>
+      <div>
+        <div class="ds-block-title">MOTION SYSTEM</div>
+        <div class="anim-col">
+          <div class="anim-item"><div class="anim-name">Page Entry — Cinematic Reveal</div><div class="anim-desc">Staggered fade-up, 600ms ease-out. Typography first, imagery second.</div></div>
+          <div class="anim-item"><div class="anim-name">Product Hover — Depth Shift</div><div class="anim-desc">Scale 1.03, shadow expansion, quick-add CTA emerges at 200ms.</div></div>
+          <div class="anim-item"><div class="anim-name">Scroll Parallax — Layered Depth</div><div class="anim-desc">Background moves at 0.4× scroll rate. Cinematic depth perception.</div></div>
+          <div class="anim-item"><div class="anim-name">Cart Micro-interaction</div><div class="anim-desc">Product "flies" to cart icon with spring physics. Count increment.</div></div>
+          <div class="anim-item"><div class="anim-name">Countdown Pulse</div><div class="anim-desc">Real-time digit flips. Ember colour intensifies in the final hour.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S13 — PERFORMANCE
+══════════════════════════════════════════════════ -->
+<section id="s-perf" style="background:var(--black);">
+  <div class="content">
+    <div class="label">13 — Performance Architecture</div>
+    <div class="sec-title">Built for<br><span style="color:var(--gold)">Speed</span></div>
+    <div class="perf-grid">
+      <div>
+        <div class="score-row">
+          <div><div class="score-circle g" style="--p:98"><span class="score-val">98</span></div><div class="score-lbl">Performance</div></div>
+          <div><div class="score-circle g" style="--p:100"><span class="score-val">100</span></div><div class="score-lbl">Accessibility</div></div>
+          <div><div class="score-circle a" style="--p:96"><span class="score-val">96</span></div><div class="score-lbl">Best Practices</div></div>
+          <div><div class="score-circle a" style="--p:97"><span class="score-val">97</span></div><div class="score-lbl">SEO Score</div></div>
+        </div>
+        <div class="cwv-box">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--gold);margin-bottom:12px;text-transform:uppercase;">Core Web Vitals Targets</div>
+          <div class="cwv-row"><span class="cwv-key">Largest Contentful Paint (LCP)</span><span class="cwv-val">&lt; 1.8s</span></div>
+          <div class="cwv-row"><span class="cwv-key">First Input Delay (FID)</span><span class="cwv-val">&lt; 100ms</span></div>
+          <div class="cwv-row"><span class="cwv-key">Cumulative Layout Shift (CLS)</span><span class="cwv-val">&lt; 0.05</span></div>
+          <div class="cwv-row"><span class="cwv-key">Time to First Byte (TTFB)</span><span class="cwv-val">&lt; 200ms</span></div>
+        </div>
+      </div>
+      <div class="perf-feat-list">
+        <div class="perf-feat"><div style="font-size:20px;">⚡</div><div><div style="font-size:13px;font-weight:500;margin-bottom:4px;">Image Optimization Pipeline</div><div style="font-size:11px;color:var(--gray);">Next.js Image, WebP/AVIF, responsive srcsets, lazy loading with blur placeholders.</div></div><div class="perf-badge pb-green">ACTIVE</div></div>
+        <div class="perf-feat"><div style="font-size:20px;">🌐</div><div><div style="font-size:13px;font-weight:500;margin-bottom:4px;">Global CDN Distribution</div><div style="font-size:11px;color:var(--gray);">Cloudflare edge network — assets served from &lt;50ms from any Indian metro.</div></div><div class="perf-badge pb-gold">CDN</div></div>
+        <div class="perf-feat"><div style="font-size:20px;">🗄</div><div><div style="font-size:13px;font-weight:500;margin-bottom:4px;">Redis Query Caching</div><div style="font-size:11px;color:var(--gray);">Product catalog, sessions, raffle state cached. &gt;90% cache hit rate.</div></div><div class="perf-badge pb-gold">CACHE</div></div>
+        <div class="perf-feat"><div style="font-size:20px;">📱</div><div><div style="font-size:13px;font-weight:500;margin-bottom:4px;">Progressive Web App</div><div style="font-size:11px;color:var(--gray);">Service worker for offline browsing, add-to-homescreen, push notifications.</div></div><div class="perf-badge pb-green">PWA</div></div>
+        <div class="perf-feat"><div style="font-size:20px;">🔎</div><div><div style="font-size:13px;font-weight:500;margin-bottom:4px;">SSR/SSG SEO Architecture</div><div style="font-size:11px;color:var(--gray);">Server-rendered pages, structured data, dynamic sitemaps, canonical tags.</div></div><div class="perf-badge pb-green">SSR</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S14 — SECURITY
+══════════════════════════════════════════════════ -->
+<section id="s-sec" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">14 — Security & Infrastructure</div>
+    <div class="sec-title">Fortress-Grade<br><span style="color:var(--gold)">Security</span></div>
+    <div class="sec3">
+      <div class="sec-card dark-card"><div class="sec-icon">🔒</div><div class="sec-title">PAYMENT SECURITY</div><div class="dot-list"><div class="dot-item">PCI-DSS compliant via certified gateways</div><div class="dot-item">3DS2 authentication for all card transactions</div><div class="dot-item">Tokenized card storage — no raw data stored</div><div class="dot-item">TLS 1.3 encryption for all data in transit</div><div class="dot-item">Real-time fraud detection & velocity checks</div><div class="dot-item">Webhook signature verification</div></div></div>
+      <div class="sec-card dark-card"><div class="sec-icon">🛡</div><div class="sec-title">AUTH & ACCESS</div><div class="dot-list"><div class="dot-item">JWT + Refresh Token rotation, short TTLs</div><div class="dot-item">bcrypt password hashing, adaptive cost</div><div class="dot-item">Role-based access — Admin, Manager, Viewer</div><div class="dot-item">Rate limiting on all auth endpoints</div><div class="dot-item">CSRF protection + secure cookie flags</div><div class="dot-item">2FA for all admin panel access</div></div></div>
+      <div class="sec-card dark-card"><div class="sec-icon">🏗</div><div class="sec-title">INFRASTRUCTURE</div><div class="dot-list"><div class="dot-item">Daily automated backups, 30-day retention</div><div class="dot-item">Cloudflare DDoS protection + WAF</div><div class="dot-item">Secrets manager for environment variables</div><div class="dot-item">Dependency scanning + automated patches</div><div class="dot-item">99.9% uptime SLA with health monitoring</div><div class="dot-item">GDPR-aligned data handling</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S15 — SCALABILITY ROADMAP
+══════════════════════════════════════════════════ -->
+<section id="s-roadmap" style="background:var(--black);">
+  <div class="content">
+    <div class="label">15 — Scalability Roadmap</div>
+    <div class="sec-title">Four Phases.<br>One <span style="color:var(--gold)">Universe.</span></div>
+    <div class="roadmap4">
+      <div class="phase-card"><div class="phase-dot on"></div><div class="phase-lbl">Phase 01</div><div class="phase-name">DIGITAL FOUNDATION</div><div class="arr-list"><div class="arr-item">Premium e-commerce website</div><div class="arr-item">Full catalog & inventory system</div><div class="arr-item">Payment gateway integration</div><div class="arr-item">Order & shipping management</div><div class="arr-item">Customer accounts + wishlist</div><div class="arr-item">Admin panel & analytics</div><div class="arr-item">SEO foundation + performance</div></div><div class="phase-tl">Months 1–3 → MVP Launch</div></div>
+      <div class="phase-card"><div class="phase-dot"></div><div class="phase-lbl">Phase 02</div><div class="phase-name">COMMERCE POWER</div><div class="arr-list"><div class="arr-item">Raffle & drop queue system</div><div class="arr-item">Loyalty & rewards program</div><div class="arr-item">AI size recommendation</div><div class="arr-item">Influencer affiliate system</div><div class="arr-item">Advanced analytics suite</div><div class="arr-item">Social commerce integrations</div><div class="arr-item">Abandoned cart automation</div></div><div class="phase-tl">Months 4–6 → Growth Engine</div></div>
+      <div class="phase-card"><div class="phase-dot"></div><div class="phase-lbl">Phase 03</div><div class="phase-name">COMMUNITY LAYER</div><div class="arr-list"><div class="arr-item">3D product viewer (WebGL)</div><div class="arr-item">Gamification & badges</div><div class="arr-item">AI chatbot & stylist</div><div class="arr-item">Creator collaboration tools</div><div class="arr-item">Personalised storefronts</div><div class="arr-item">Resale marketplace beta</div><div class="arr-item">Member-exclusive content</div></div><div class="phase-tl">Months 7–12 → Culture Platform</div></div>
+      <div class="phase-card"><div class="phase-dot"></div><div class="phase-lbl">Phase 04</div><div class="phase-name">GLOBAL SCALE</div><div class="arr-list"><div class="arr-item">React Native mobile app</div><div class="arr-item">AR virtual try-on</div><div class="arr-item">International expansion</div><div class="arr-item">Multi-currency + localisation</div><div class="arr-item">Full resale marketplace</div><div class="arr-item">Enterprise API layer</div><div class="arr-item">B2B wholesale portal</div></div><div class="phase-tl">Year 2+ → Global Brand</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     S16 — WHAT HAPPENS AFTER 10K VISITORS
+══════════════════════════════════════════════════ -->
+<section id="s-scale10k" style="background:var(--dark);">
+  <div class="content">
+    <div class="label">16 — Scalability Vision</div>
+    <div class="sec-title">What Happens After<br><span style="color:var(--gold)">10,000+ Visitors?</span></div>
+    <p class="sec-sub">This ecosystem is not designed just for launch. It's designed for growth. Every architectural decision we make today enables what comes next.</p>
+    <div class="scale-vision">
+      <div class="sv-stages">
+        <div class="sv-stage">
+          <div><div class="sv-stage-threshold">0–1K</div><div class="sv-stage-sub">Visitors / Month</div></div>
+          <div class="sv-stage-desc">Shared hosting tier, basic CDN, standard database plan. Costs: ₹3–6K/mo. All features run smoothly, zero performance concerns.</div>
+        </div>
+        <div class="sv-stage">
+          <div><div class="sv-stage-threshold">1K–10K</div><div class="sv-stage-sub">Visitors / Month</div></div>
+          <div class="sv-stage-desc">Redis caching activated, CDN rules optimised, database connection pooling enabled. Auto-scales transparently. Costs: ₹8–15K/mo. Zero downtime.</div>
+        </div>
+        <div class="sv-stage">
+          <div><div class="sv-stage-threshold">10K–50K</div><div class="sv-stage-sub">Visitors / Month</div></div>
+          <div class="sv-stage-desc">Database upgraded to dedicated tier, Redis cluster active, image CDN fully active, monitoring dashboards enabled. Costs: ₹18–35K/mo.</div>
+        </div>
+        <div class="sv-stage">
+          <div><div class="sv-stage-threshold">50K–200K</div><div class="sv-stage-sub">Visitors / Month</div></div>
+          <div class="sv-stage-desc">Load balancers, database read replicas, advanced analytics, full observability stack. Migration evaluation triggered. Costs: ₹40–80K/mo.</div>
+        </div>
+        <div class="sv-stage">
+          <div><div class="sv-stage-threshold">200K+</div><div class="sv-stage-sub">Visitors / Month</div></div>
+          <div class="sv-stage-desc">Enterprise-grade infrastructure, multi-region deployment, dedicated DevOps. Full custom stack migration complete. Platform now fully owned.</div>
+        </div>
+      </div>
+      <div class="sv-infra">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;margin-bottom:20px;color:var(--gold);">SCALING INFRASTRUCTURE STACK</div>
+        <div class="sv-infra-item"><div class="sv-infra-title">Cloudflare CDN + WAF</div><div class="sv-infra-desc">DDoS protection and global content delivery active from Day 1. Scales to unlimited traffic without configuration changes.</div></div>
+        <div class="sv-infra-item"><div class="sv-infra-title">Redis Distributed Cache</div><div class="sv-infra-desc">Product catalog and session data cached. Database queries reduced by 90%+ at peak. Drop events handled without strain.</div></div>
+        <div class="sv-infra-item"><div class="sv-infra-title">Database Horizontal Scaling</div><div class="sv-infra-desc">MongoDB Atlas / PostgreSQL with auto-scaling. Read replicas added as traffic demands. No migration needed — just scale up.</div></div>
+        <div class="sv-infra-item"><div class="sv-infra-title">Queue System for Drop Events</div><div class="sv-infra-desc">Redis-based queue handles 10,000 simultaneous raffle entries without server strain. Fair, transparent, and real-time.</div></div>
+        <div class="sv-infra-item"><div class="sv-infra-title">Observability & Alerting</div><div class="sv-infra-desc">Real-time performance monitoring, error tracking (Sentry), uptime alerts, and automated incident response from Phase 2.</div></div>
+        <div style="margin-top:20px;padding:20px;background:rgba(200,169,110,.06);border:1px solid var(--border);font-size:13px;color:var(--gray);line-height:1.7;">
+          <strong style="color:var(--white)">The bottom line:</strong> This ecosystem is architected to handle your first ₹1 Crore in revenue and your first ₹100 Crore — without a rebuild.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
